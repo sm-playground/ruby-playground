@@ -1,5 +1,4 @@
 def two_sum(nums, target)
-    ret = nil
     nums.each_with_index do |num, ind|
         (ind + 1...nums.length).each do |inner_ind|
             if nums[ind] + nums[inner_ind] == target
@@ -8,7 +7,20 @@ def two_sum(nums, target)
         end
     end
 
-    return ret
+    return nil
+end
+
+def two_sum_optimized(nums, target)
+  complements = {}
+  nums.each_with_index do |num, ind|
+    complement = target - num
+    if !complements[complement].nil?
+      return[complements[complement], ind]
+    else
+      complements[num] = ind
+    end
+  end
+  nil
 end
 
 [
@@ -26,7 +38,10 @@ end
   }
 ].each do |test_info|
   actual = two_sum(test_info[:input][:arr], test_info[:input][:target])
-  # puts test_info, actual
+  if test_info[:expected].sort != actual.sort
+    raise ('ERROR')
+  end
+  actual = two_sum_optimized(test_info[:input][:arr], test_info[:input][:target])
   if test_info[:expected].sort != actual.sort
     raise ('ERROR')
   end
